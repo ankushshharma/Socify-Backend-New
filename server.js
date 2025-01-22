@@ -9,9 +9,9 @@ const { promisify } = require('util');
 
 const app = express()
 
-// Update CORS configuration
+// Development-only CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both ports
+  origin: '*',
   credentials: true
 }));
 
@@ -118,6 +118,14 @@ app.get('/api/download/:dir/:filename', async (req, res) => {
       error: error.message
     });
   }
+});
+
+// Add health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Add helper function for formatting file sizes
